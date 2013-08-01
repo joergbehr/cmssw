@@ -24,6 +24,9 @@
 #include "DataFormats/SiPixelDetId/interface/PixelSubdetector.h"
 #include "DataFormats/TrackerCommon/interface/TrackerTopology.h"
 #include "Geometry/Records/interface/IdealGeometryRecord.h"
+
+#include "cmath"
+
 const int kBPIX = PixelSubdetector::PixelBarrel;
 const int kFPIX = PixelSubdetector::PixelEndcap;
 
@@ -179,43 +182,43 @@ AlignmentTrackSelector::AlignmentTrackSelector(const edm::ParameterSet & cfg) :
 
   // Checking whether cuts on positions of first and last track hits are defined properly
   if(RorZofFirstHitMin_.size() != 2){
-      edm::LogError("AlignmentTrackSelector") << "Wrong configuration of 'RorZofFirstHitMin'."
+      throw cms::Exception("BadConfig") << "@SUB=AlignmentTrackSelector::AlignmentTrackSelector" 
+	  << "Wrong configuration of 'RorZofFirstHitMin'."
 	  << " Must have exactly 2 values instead of configured " << RorZofFirstHitMin_.size() << ")";
-      return;
   } else {
     RorZofFirstHitMin_.at(0)=std::fabs(RorZofFirstHitMin_.at(0));
     RorZofFirstHitMin_.at(1)=std::fabs(RorZofFirstHitMin_.at(1));
   }
   if(RorZofFirstHitMax_.size() != 2){
-      edm::LogError("AlignmentTrackSelector") << "Wrong configuration of 'RorZofFirstHitMax'."
+      throw cms::Exception("BadConfig") << "@SUB=AlignmentTrackSelector::AlignmentTrackSelector" 
+	  << "Wrong configuration of 'RorZofFirstHitMax'."
 	  << " Must have exactly 2 values instead of configured " << RorZofFirstHitMax_.size() << ")";
-      return;
   } else {
     RorZofFirstHitMax_.at(0) = std::fabs(RorZofFirstHitMax_.at(0));
     RorZofFirstHitMax_.at(1) = std::fabs(RorZofFirstHitMax_.at(1));
   }
   if(RorZofLastHitMin_.size() != 2){
-      edm::LogError("AlignmentTrackSelector") << "Wrong configuration of 'RorZofLastHitMin'."
+      throw cms::Exception("BadConfig") << "@SUB=AlignmentTrackSelector::AlignmentTrackSelector" 
+	  << "Wrong configuration of 'RorZofLastHitMin'."
 	  << " Must have exactly 2 values instead of configured " << RorZofLastHitMin_.size() << ")";
-      return;
   } else {
     RorZofLastHitMin_.at(0) = std::fabs(RorZofLastHitMin_.at(0));
     RorZofLastHitMin_.at(1) = std::fabs(RorZofLastHitMin_.at(1));
   }
   if(RorZofLastHitMax_.size() != 2){
-      edm::LogError("AlignmentTrackSelector") << "Wrong configuration of 'RorZofLastHitMax'."
+      throw cms::Exception("BadConfig") << "@SUB=AlignmentTrackSelector::AlignmentTrackSelector" 
+	  << "Wrong configuration of 'RorZofLastHitMax'."
 	  << " Must have exactly 2 values instead of configured " << RorZofLastHitMax_.size() << ")";
-      return;
   } else {
     RorZofLastHitMax_.at(0) = std::fabs(RorZofLastHitMax_.at(0));
     RorZofLastHitMax_.at(1) = std::fabs(RorZofLastHitMax_.at(1));
   }
   // If first hit set to be at larger distance then the last hit
   if(RorZofFirstHitMin_.at(0) > RorZofLastHitMax_.at(0) && RorZofFirstHitMin_.at(1) > RorZofLastHitMax_.at(1)){
-      edm::LogError("AlignmentTrackSelector") << "Position of the first hit is set to larger distance than the last hit:"
+      throw cms::Exception("BadConfig") << "@SUB=AlignmentTrackSelector::AlignmentTrackSelector" 
+	  << "Position of the first hit is set to larger distance than the last hit:."
 	  << " First hit(min): [" << RorZofFirstHitMin_.at(0) << ", " << RorZofFirstHitMin_.at(1) << "]; Last hit(max): [" 
 	  << RorZofLastHitMax_.at(0) << ", " << RorZofLastHitMax_.at(1) << "];";
-      return;
   }
 
 }
